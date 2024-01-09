@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://tile_set.png" type="Texture" id=1]
 [ext_resource path="res://World.gd" type="Script" id=2]
+[ext_resource path="res://alagard.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="TileSet" id=1]
 0/name = "tile_set.png 0"
@@ -33,6 +34,13 @@
 1/shapes = [  ]
 1/z_index = 0
 
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.6, 0.6, 0.6, 0.937255 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 30
+font_data = ExtResource( 3 )
+
 [node name="World" type="TileMap"]
 tile_set = SubResource( 1 )
 cell_size = Vector2( 16, 16 )
@@ -41,3 +49,39 @@ script = ExtResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Button" type="Panel" parent="CanvasLayer"]
+margin_left = 40.0
+margin_top = 32.0
+margin_right = 568.0
+margin_bottom = 248.0
+custom_styles/panel = SubResource( 4 )
+
+[node name="Label" type="Label" parent="CanvasLayer/Button"]
+margin_left = 88.0
+margin_top = 64.0
+margin_right = 128.0
+margin_bottom = 78.0
+custom_fonts/font = SubResource( 3 )
+text = "Pulsa Enter
+para comenzar y parar la
+simulacion"
+align = 1
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+margin_left = 608.0
+margin_top = 40.0
+margin_right = 1160.0
+margin_bottom = 184.0
+custom_styles/panel = SubResource( 4 )
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel"]
+margin_left = 24.0
+margin_top = 40.0
+margin_right = 536.0
+margin_bottom = 101.0
+custom_fonts/font = SubResource( 3 )
+text = "Pulsa click izq. para pintar las celdas
+y derecho para borrar."

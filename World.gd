@@ -27,14 +27,27 @@ func _input(event):
 	## TECLA ENTER DETIENE Y REANUDA LA SIMULACION
 	if event.is_action_pressed("enter"):
 		corriendo = !corriendo
-	## CON EL CLICK ISQUIERDO SE CREAN Y DESTRUYEN CELDAS
-	if event.is_action_pressed("click"):
-		var pos = (get_local_mouse_position()/celda_size).floor()
-		set_cellv(pos,1-get_cellv(pos))
+	
+	#if event.is_action("rueda_up"):
+	#	$Camera2D.zoom *= 1.1
+	
+	#if event.is_action('rueda_down'):
+	#	$Camera2D.zoom *= 0.9
 
 func _process(delta):
+	
+	
 	if !corriendo: # Si la simulacion no esta corriendo no se procesa nada
+		if Input.is_action_pressed("click"):
+			var pos = (get_local_mouse_position()/celda_size).floor()
+			set_cellv(pos,1)
+		if Input.is_action_pressed("click_der"):
+			var pos = (get_local_mouse_position()/celda_size).floor()
+			set_cellv(pos,0)
 		return
+	
+	
+	
 	
 	## Pasamos por todas las celdas del tablero
 	for x in range(ancho):
