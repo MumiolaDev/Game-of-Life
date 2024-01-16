@@ -1,0 +1,48 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+uniform sampler2D textura_activa;
+uniform sampler2D textura_inactiva;
+uniform sampler2D textura_data_binaria;
+
+uniform int cell_size = 8;
+uniform int ancho_cell;
+
+const float fade = 32.0;
+
+void fragment(){
+	// Calcular el tamaño del tablero en pixeles y escalarlo
+	vec2 total_size = vec2( float(ancho_cell) * float(cell_size) );
+	vec2 scaledUV = UV * float(ancho_cell); // asi cada indice es un pixel
+	ivec2 indice_cell = ivec2(floor(scaledUV)); // calcular el indice de las celdas escaladas
+	
+	// Checar si las cordenada uv actual se encuentra dentro de la celda actual
+	vec2 celda_UV = fract(scaledUV);
+	bool dentro = all(greaterThanEqual(celda_UV,vec2(0.0))) && all(lessThan(celda_UV,vec2(1.0)));
+	
+	// Calcular los datos para la textura binaria
+	vec2 binary_data_UV = vec2(
+		float(indice_cell.x) / float(ancho_cell-1), 
+		float(indice_cell.y)/ float(ancho_cell-1)
+	);
+	float valor_binario = texture(textura_data_binaria, binary_data_UV).r;
+	// Determianr si el valor es un pixel blanco
+	bool es_blanco = valor_binario > 0.5;
+// calcular la distancia al borde mas cercano
+	float distanceX = min(scaledUV.x, float(ancho_cell)-scaledUV.x) * float(cell_size);
+	float distanceY = min(scaledUV.y, float(ancho_cell)-scaledUV.y) * float(cell_size);
+	float distancia_al_borde = min(distanceX,distanceY);
+	// 
+	vec4 color = texture(textura_inactiva, celda_UV);
+	
+	if(es_blanco && dentro){
+		color = texture(textura_activa, celda_UV);
+	}
+	
+	float alphaFactor = log(distancia_al_borde*1.0)/log(fade * 1.0);
+	color.a *= alphaFactor;
+	COLOR = color;
+	
+}"
